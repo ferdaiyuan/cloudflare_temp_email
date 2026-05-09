@@ -47,12 +47,14 @@ jobs:
 
       - name: Deploy Frontend for ${{ github.ref_name }}
         run: |
+          # ✅ 关键修复：允许 pnpm 执行构建脚本
+          pnpm config set approve-builds true
           cd frontend/
-          pnpm install --no-frozen-lockfile --config.approve-builds=true
+          pnpm install --no-frozen-lockfile
           pnpm build:pages
           cd ../pages/
           echo '${{ secrets.PAGE_TOML }}' > wrangler.toml
-          pnpm install --no-frozen-lockfile --config.approve-builds=true
+          pnpm install --no-frozen-lockfile
           pnpm run deploy
           echo "Deploying production for ${{ github.ref_name }}"
         env:

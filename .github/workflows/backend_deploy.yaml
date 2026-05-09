@@ -32,12 +32,15 @@ jobs:
 
       - name: Deploy Backend for ${{ github.ref_name }}
         run: |
+          # ✅ 关键修复：允许 pnpm 执行构建脚本
+          pnpm config set approve-builds true
+          
           export use_worker_assets=${{ secrets.USE_WORKER_ASSETS }}
           export use_worker_assets_with_telegram=${{ secrets.USE_WORKER_ASSETS_WITH_TELEGRAM }}
           
           if [ -n "$use_worker_assets" ]; then
             cd frontend/
-            pnpm install --no-frozen-lockfile --config.approve-builds=true
+            pnpm install --no-frozen-lockfile
             if [ -n "$use_worker_assets_with_telegram" ]; then
               echo "Building with telegram pages"
               pnpm build:telegram:pages
@@ -47,7 +50,7 @@ jobs:
             fi
             cd ..
           fi
-
+          
           export debug_mode=${{ secrets.DEBUG_MODE }}
           export use_mail_wasm_parser=${{ secrets.BACKEND_USE_MAIL_WASM_PARSER }}
           
@@ -55,7 +58,7 @@ jobs:
           # ✅ 修复核心：使用环境变量写入，避免 Shell 解析特殊字符
           printf '%s\n' "$WRANGLER_TOML_CONTENT" > wrangler.toml
           
-          pnpm install --no-frozen-lockfile --config.approve-builds=true
+          pnpm install --no-frozen-lockfile
 
           if [ -n "$use_mail_wasm_parser" ]; then
             echo "Using mail-parser-wasm-worker"

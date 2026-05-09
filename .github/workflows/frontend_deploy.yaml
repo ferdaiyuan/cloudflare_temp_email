@@ -30,9 +30,11 @@ jobs:
       - name: Deploy Frontend for ${{ github.ref_name }}
         if: ${{ env.FRONTEND_NAME != '' }}
         run: |
+          # ✅ 关键修复：允许 pnpm 执行构建脚本
+          pnpm config set approve-builds true
           cd frontend/
           echo "${{ secrets.FRONTEND_ENV }}" > .env.prod
-          pnpm install --no-frozen-lockfile --config.approve-builds=true
+          pnpm install --no-frozen-lockfile
           export frontend_branch="${{ secrets.FRONTEND_BRANCH }}"
           if [ -n "$frontend_branch" ]; then
             echo "Deploying branch $frontend_branch"
@@ -67,9 +69,11 @@ jobs:
       - name: Deploy Telegram Frontend for ${{ github.ref_name }}
         if: ${{ env.TG_FRONTEND_NAME != '' }}
         run: |
+          # ✅ 关键修复：允许 pnpm 执行构建脚本
+          pnpm config set approve-builds true
           cd frontend/
           echo "${{ secrets.FRONTEND_ENV }}" > .env.prod
-          pnpm install --no-frozen-lockfile --config.approve-builds=true
+          pnpm install --no-frozen-lockfile
           export frontend_branch="${{ secrets.FRONTEND_BRANCH }}"
           if [ -n "$frontend_branch" ]; then
             echo "Deploying telegram mini app branch $frontend_branch"
