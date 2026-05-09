@@ -32,7 +32,7 @@ jobs:
         run: |
           cd frontend/
           echo "${{ secrets.FRONTEND_ENV }}" > .env.prod
-          pnpm install --no-frozen-lockfile
+          pnpm install --no-frozen-lockfile --config.approve-builds=true
           export frontend_branch="${{ secrets.FRONTEND_BRANCH }}"
           if [ -n "$frontend_branch" ]; then
             echo "Deploying branch $frontend_branch"
@@ -69,7 +69,7 @@ jobs:
         run: |
           cd frontend/
           echo "${{ secrets.FRONTEND_ENV }}" > .env.prod
-          pnpm install --no-frozen-lockfile
+          pnpm install --no-frozen-lockfile --config.approve-builds=true
           export frontend_branch="${{ secrets.FRONTEND_BRANCH }}"
           if [ -n "$frontend_branch" ]; then
             echo "Deploying telegram mini app branch $frontend_branch"

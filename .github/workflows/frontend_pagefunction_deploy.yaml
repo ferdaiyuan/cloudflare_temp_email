@@ -48,11 +48,11 @@ jobs:
       - name: Deploy Frontend for ${{ github.ref_name }}
         run: |
           cd frontend/
-          pnpm install --no-frozen-lockfile
+          pnpm install --no-frozen-lockfile --config.approve-builds=true
           pnpm build:pages
           cd ../pages/
           echo '${{ secrets.PAGE_TOML }}' > wrangler.toml
-          pnpm install --no-frozen-lockfile
+          pnpm install --no-frozen-lockfile --config.approve-builds=true
           pnpm run deploy
           echo "Deploying production for ${{ github.ref_name }}"
         env:
