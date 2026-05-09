@@ -70,13 +70,7 @@ jobs:
           if [ "$debug_mode" = "true" ]; then
             pnpm run deploy
           else
-            if pnpm run deploy >/dev/null 2>&1; then
-              echo "Deploy succeeded"
-            else
-              code=$?
-              echo "Command failed with exit code $code"
-              exit "$code"
-            fi
+            pnpm run deploy
           fi
           echo "Deployed for tag ${{ github.ref_name }}"
         env:
